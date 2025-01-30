@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 // Data for DHS Enrollment Paperwork
 const enrollmentPaperwork = {
 	QSPs: [
@@ -74,10 +76,12 @@ const Application = () => {
 						<p className="flex-grow employCardHead text-center sm:text-left">
 							Employment application form
 						</p>
+
+						{/* <Link to=""></Link> */}
 						<button className="px-4 py-2 bg-white text-black rounded-[8px] border border-[#000000]/[.10] bodyText font-bold">
-							<a href="/employmentForm" data-discover="true">
+							<Link to="/employmentForm" data-discover="true">
 								Apply Now
-							</a>
+							</Link>
 						</button>
 					</div>
 

@@ -1,7 +1,98 @@
+/* eslint-disable no-unused-vars */
+import emailjs from "@emailjs/browser";
+import React, { useRef, useState } from "react";
+
 const EmployeementApplication = () => {
+	const form = useRef();
+	const [formData, setFormData] = useState({
+		name: "",
+		date: "",
+		address: "",
+		city: "",
+		state: "",
+		zip: "",
+		phoneType: [], // Mobile/Home/Work checkboxes
+		veteran: "",
+		education: [], // High School, Trade School, etc.
+		professionalOrgs: "",
+		licenseNumber: "",
+		licenseState: "",
+		workEligibility: "",
+		backgroundCheck: "",
+		felony: "",
+		felonyExplanation: "",
+		position: "",
+		startDate: "",
+		availability: [], // Full Time, Part Time
+		status: [], // Regular, Temporary, Seasonal
+		shift: [], // Days, Evenings, etc.
+		desiredPay: "",
+		overtime: "",
+		essentialFunctions: "",
+		skills: "",
+		references: [], // List of references
+	});
+	const [file, setFile] = useState(null);
+
+	// Handle input field changes
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setFormData((prev) => ({ ...prev, [name]: value }));
+	};
+
+	// Handle checkbox selections
+	const handleCheckboxChange = (e, field) => {
+		const { value, checked } = e.target;
+		setFormData((prev) => ({
+			...prev,
+			[field]: checked
+				? [...prev[field], value]
+				: prev[field].filter((item) => item !== value),
+		}));
+	};
+
+	// Handle file upload
+	const handleFileChange = (e) => {
+		setFile(e.target.files[0]);
+	};
+
+	// Handle form submission
+	const sendEmail = (e) => {
+		e.preventDefault();
+
+		const formDataToSend = new FormData();
+		for (const [key, value] of Object.entries(formData)) {
+			if (Array.isArray(value)) {
+				formDataToSend.append(key, value.join(", "));
+			} else {
+				formDataToSend.append(key, value);
+			}
+		}
+		// if (file) {
+		// 	formDataToSend.append("file", file);
+		// }
+
+		emailjs
+			.sendForm(
+				"service_te3fsdb", // EmailJS service ID
+				"template_0cy1uhe", // EmailJS template ID
+				form.current,
+				"gO7MDxHFsFaBgMGxV" // EmailJS public key
+			)
+			.then(
+				(result) => {
+					alert("Application submitted successfully!");
+					e.target.reset();
+				},
+				(error) => {
+					alert("Failed to submit the application. Please try again.");
+				}
+			);
+	};
+
 	return (
 		<div className="sectionGap">
-			<form className=" ">
+			<form ref={form} onSubmit={sendEmail} className=" ">
 				<div className="p-2 ">
 					<h1 className="text-center employCardHead mb-6">
 						Employment Application
@@ -19,14 +110,22 @@ const EmployeementApplication = () => {
 										</label>
 										<input
 											type="text"
+											name="name"
+											value={formData.name}
+											onChange={handleChange}
 											className="w-full border border-gray-300 rounded p-2"
 											placeholder="Enter your name"
+											required
 										/>
 									</div>
 									<div>
 										<label className="block mb-4">Date:</label>
 										<input
 											type="date"
+											name="date"
+											value={formData.date}
+											onChange={handleChange}
+											required
 											className="w-full border border-gray-300 rounded p-2"
 										/>
 									</div>
@@ -35,6 +134,10 @@ const EmployeementApplication = () => {
 								<label className="block mb-1">Street Address:</label>
 								<input
 									type="text"
+									name="address"
+									value={formData.address}
+									onChange={handleChange}
+									required
 									className="w-full border border-gray-300 rounded p-2"
 									placeholder="Enter your address"
 								/>
@@ -44,6 +147,10 @@ const EmployeementApplication = () => {
 									<label className="block mb-4">City:</label>
 									<input
 										type="text"
+										name="city"
+										value={formData.city}
+										onChange={handleChange}
+										required
 										className="w-full border border-gray-300 rounded p-2"
 									/>
 								</div>
@@ -51,6 +158,10 @@ const EmployeementApplication = () => {
 									<label className="block mb-4">State:</label>
 									<input
 										type="text"
+										name="state"
+										value={formData.state}
+										onChange={handleChange}
+										required
 										className="w-full border border-gray-300 rounded p-2"
 									/>
 								</div>
@@ -58,6 +169,10 @@ const EmployeementApplication = () => {
 									<label className="block mb-4">Zip:</label>
 									<input
 										type="text"
+										name="zip"
+										value={formData.zip}
+										onChange={handleChange}
+										required
 										className="w-full border border-gray-300 rounded p-2"
 									/>
 								</div>
@@ -70,15 +185,30 @@ const EmployeementApplication = () => {
 								<label className="block mb-1">Phone #:</label>
 								<div className="flex items-center gap-4">
 									<label>
-										<input type="checkbox" className="mr-2" />
+										<input
+											type="checkbox"
+											value="Mobile"
+											onChange={(e) => handleCheckboxChange(e, "phoneType")}
+											className="mr-2"
+										/>
 										Mobile
 									</label>
 									<label>
-										<input type="checkbox" className="mr-2" />
+										<input
+											type="checkbox"
+											value="Home"
+											onChange={(e) => handleCheckboxChange(e, "phoneType")}
+											className="mr-2"
+										/>
 										Home
 									</label>
 									<label>
-										<input type="checkbox" className="mr-2" />
+										<input
+											type="checkbox"
+											value="Work"
+											onChange={(e) => handleCheckboxChange(e, "phoneType")}
+											className="mr-2"
+										/>
 										work
 									</label>
 								</div>
@@ -861,7 +991,9 @@ const EmployeementApplication = () => {
 							<label className="block font-medium mb-4">Upload Your CV:</label>
 							<input
 								type="file"
+								// name="file"
 								accept=".pdf,.doc,.docx"
+								onChange={handleFileChange}
 								className="w-full border border-gray-300 rounded p-2"
 							/>
 							{/* <p className="text-sm text-gray-500 mt-1">
