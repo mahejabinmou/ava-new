@@ -11,7 +11,7 @@ import Employment from "./ClientSide/Employment/Employment";
 import FAQ from "./ClientSide/FAQ/FAQ";
 import Home from "./ClientSide/Home/Home";
 import Layout from "./ClientSide/Main";
-import OurPackages from "./ClientSide/ourPackages/ourPackages";
+import OurPackage from "./ClientSide/ourPackages/OurPackage";
 import Service from "./ClientSide/Service/Service";
 import "./index.css";
 
@@ -65,7 +65,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/ourPackages",
-				element: <OurPackages></OurPackages>,
+				element: <OurPackage></OurPackage>,
 			},
 		],
 	},
